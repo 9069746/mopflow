@@ -1,0 +1,151 @@
+@charset "utf-8";
+@mixin square($length) {
+    width: $length;
+    height: $length;
+}
+
+@mixin absoluteCenter($width, $height) {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: (-$height)/2 0 0 (-$width)/2;
+}
+
+%triangleCommonStyle {
+    display: block;
+    content: " ";
+    width: 0;
+    line-height: 0;
+    font-size: 0;
+    border-style: solid;
+    border-color: transparent;
+}
+
+@mixin triangle($width, $height, $direction, $borderColor, $ie6borderColor:#f00) {
+    @extend %triangleCommonStyle;
+    @if not($function_mobileOnly) {
+        _border-color: $ie6borderColor;
+        _filter: chroma(color=$ie6borderColor);
+    }
+    @if $direction==top {
+        border-width: $height $width / 2;
+        border-top: 0;
+        border-bottom-color: $borderColor;
+        @if not($function_mobileOnly) {
+            _border-bottom-color: $borderColor;
+        }
+    }
+    @else if $direction==bottom {
+        border-width: $height $width / 2;
+        border-bottom: 0;
+        border-top-color: $borderColor;
+        @if not($function_mobileOnly) {
+            _border-top-color: $borderColor;
+        }
+    }
+    @else if $direction==left {
+        border-width: $width / 2 $height;
+        border-left: 0;
+        border-right-color: $borderColor;
+        @if not($function_mobileOnly) {
+            _border-right-color: $borderColor;
+        }
+    }
+    @else if $direction==right {
+        border-width: $width / 2 $height;
+        border-right: 0;
+        border-left-color: $borderColor;
+        @if not($function_mobileOnly) {
+            _border-left-color: $borderColor;
+        }
+    }
+}
+
+@mixin cross($crossLength:26px, $crossLineThickness:2px, $crossLineColor:$common_color_link) {
+    position: relative;
+    @include square($crossLength);
+    &:before,
+    &:after {
+        content: "";
+        font-size: 0;
+        line-height: 0;
+        position: absolute;
+        background-color: $crossLineColor;
+    }
+    &:before {
+        left: getLengthMaxIntegerCenter($crossLength, $crossLineThickness);
+        top: 0;
+        width: $crossLineThickness;
+        height: 100%;
+    }
+    &:after {
+        left: 0;
+        top: getLengthMaxIntegerCenter($crossLength, $crossLineThickness);
+        width: 100%;
+        height: $crossLineThickness;
+    }
+}
+
+@mixin bfc {
+    overflow: hidden;
+    zoom: 1;
+}
+
+@mixin borderStyleForOnePixel($direction: all, $color:#dedede) {
+    border-style: solid;
+    border-color: $color;
+    @if $direction==all {
+        border-width: 1px;
+    }
+    @else if $direction==top {
+        border-width: 1px 0 0 0;
+    }
+    @else if $direction==bottom {
+        border-width: 0 0 1px 0;
+    }
+    @else if $direction==left {
+        border-width: 0 0 0 1px;
+    }
+    @else if $direction==right {
+        border-width: 0 1px 0 0;
+    }
+    @else if $direction==horizontal {
+        border-width: 0 1px;
+    }
+    @else if $direction==vertical {
+        border-width: 1px 0;
+    }
+}
+
+@mixin onePixelBorder($direction: all, $color: $common_color_border, $position: outside, $borderRadius: 0) {
+    @include borderStyleForOnePixel($direction, $color);
+    border-radius: $borderRadius;
+    @include screenResolution(2) {
+        position: relative;
+        border: 0;
+        &:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 200%;
+            border-radius: $borderRadius * 2;
+            @include borderStyleForOnePixel($direction, $color);
+            transform: scale(.5);
+            transform-origin: 0 0;
+            @if $position==inside {
+                @include box_sizing(border-box);
+            }
+            pointer-events: none;
+        }
+    }
+    @include screenResolution(3) {
+        &:after {
+            width: 300%;
+            height: 300%;
+            border-radius: $borderRadius * 3;
+            transform: scale(.3333);
+        }
+    }
+}

@@ -1,0 +1,29 @@
+@@include('./_head.html', { "title": "首页" })
+
+<body id="pg-index">
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <img src="https://www.swiper.com.cn/demo/img/nature1.jpg" alt="">
+            </div>
+            <div class="swiper-slide">
+                <img src="https://www.swiper.com.cn/demo/img/nature2.jpg" alt="">
+            </div>
+            <div class="swiper-slide">
+                <img src="https://www.swiper.com.cn/demo/img/nature3.jpg" alt="">
+            </div>
+            <div class="swiper-slide">
+                <img src="https://www.swiper.com.cn/demo/img/nature4.jpg" alt="">
+            </div>>
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+    @@include('./_script.html')
+    <script>
+        var mySwiper = new Swiper('.swiper-container', {
+            pagination: {
+                el: '.swiper-pagination',
+            },
+        })
+    </script>
+</body> @@include('./_foot.html')

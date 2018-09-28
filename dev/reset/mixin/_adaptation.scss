@@ -1,0 +1,132 @@
+@charset "UTF-8";
+%clear {
+    @if not($function_mobileOnly) {
+        *zoom: 1;
+    }
+    &:after {
+        clear: both;
+        content: ".";
+        display: block;
+        line-height: 0;
+        font-size: 0;
+        visibility: hidden;
+        @if not($function_mobileOnly) {
+            overflow: hidden;
+        }
+    }
+}
+
+%text-ellipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    word-wrap: normal;
+}
+
+%text_ellipsis {
+    @extend %text-ellipsis;
+}
+
+@mixin text-multiLine-ellipsis($line: 2, $lineHeight: 20px) {
+    line-height: $lineHeight;
+    overflow: hidden;
+    height: $lineHeight * $line;
+    display: -webkit-box;
+    display: -moz-box;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: $line;
+    -moz-line-clamp: $line;
+    line-clamp: $line;
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+    box-orient: vertical;
+}
+
+%text-breakWord {
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+%text_breakWord {
+    @extend %text-breakWord;
+}
+
+@mixin screenResolution($num) {
+    @media (-webkit-min-device-pixel-ratio: $num), (min--moz-device-pixel-ratio: $num), (min-device-pixel-ratio: $num), (min-resolution: #{$num}dppx), (min-resolution: #{$num*96}dpi) {
+        @content;
+    }
+}
+
+@mixin screenForPad {
+    @media (min-width: $screen_width_pad) {
+        @content;
+    }
+    @media \0screen {
+        @content;
+    }
+}
+
+@mixin screenForPhone {
+    @media (max-width: $screen_width_pad) {
+        @content;
+    }
+}
+
+@mixin screenForIE10AndLater {
+    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+        @content;
+    }
+}
+
+@mixin forIE8 {
+    @media \0screen {
+        @content;
+    }
+}
+
+@mixin forIE9 {
+    @media all and (min-width: 0\0) and (min-resolution: .001dpcm) {
+        @content;
+    }
+}
+
+@mixin bgWithOpacity($color, $alpha) {
+    background-color: rgba($color, $alpha);
+    @include forIE8 {
+        filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#{ie-hex-str(rgba($color,$alpha))}, endcolorstr=#{ie-hex-str(rgba($color, $alpha))});
+    }
+}
+
+@mixin gradient-vertical($start-color: #555, $end-color: #333) {
+    background: -webkit-linear-gradient(0, $start-color, $end-color);
+    background: -o-linear-gradient(0, $start-color, $end-color);
+    background: -moz-linear-gradient(0, $start-color, $end-color);
+    background: linear-gradient(90deg, $start-color, $end-color);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#{ie-hex-str($start-color)}", endColorstr="#{ie-hex-str($end-color)}", GradientType=0); // IE9 and down
+}
+
+@mixin gradient-horizontal($start-color: #555, $end-color: #333, $start-percent: 0%, $end-percent: 100%) {
+    background-image: linear-gradient(to right, $start-color $start-percent, $end-color $end-percent);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#{ie-hex-str($start-color)}", endColorstr="#{ie-hex-str($end-color)}", GradientType=1); // IE9 and down
+}
+
+@mixin gradient-on-axis($axis-degree: 0, $start-color: #555, $end-color: #333, $start-percent: 0%, $end-percent: 100%) {
+    background-image: linear-gradient($axis-degree, $start-color $start-percent, $end-color $end-percent);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#{ie-hex-str($start-color)}", endColorstr="#{ie-hex-str($end-color)}", GradientType=0); // IE9 and down
+}
+
+@mixin gradient-vertical-threeColor($start-color: #555, $middle-color: #444, $end-color: #333, $start-percent: 0%, $middle-percent: 50%, $end-percent: 100%) {
+    background-image: linear-gradient(to bottom, $start-color $start-percent, $middle-color $middle-percent, $end-color $end-percent);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#{ie-hex-str($start-color)}", endColorstr="#{ie-hex-str($end-color)}", GradientType=0); // IE9 and down
+}
+
+@mixin gradient-horizontal-threeColor($start-color: #555, $middle-color: #444, $end-color: #333, $start-percent: 0%, $middle-percent: 50%, $end-percent: 100%) {
+    background-image: linear-gradient(to right, $start-color $start-percent, $middle-color $middle-percent, $end-color $end-percent);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#{ie-hex-str($start-color)}", endColorstr="#{ie-hex-str($end-color)}", GradientType=1); // IE9 and down
+}
